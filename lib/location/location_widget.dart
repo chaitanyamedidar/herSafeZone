@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,11 +25,15 @@ class _LocationWidgetState extends State<LocationWidget> {
   late LocationModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  LatLng? currentUserLocationValue;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => LocationModel());
+
+    getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
+        .then((loc) => safeSetState(() => currentUserLocationValue = loc));
   }
 
   @override
@@ -40,6 +45,23 @@ class _LocationWidgetState extends State<LocationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (currentUserLocationValue == null) {
+      return Container(
+        color: FlutterFlowTheme.of(context).primaryBackground,
+        child: Center(
+          child: SizedBox(
+            width: 50.0,
+            height: 50.0,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                FlutterFlowTheme.of(context).primary,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -94,12 +116,12 @@ class _LocationWidgetState extends State<LocationWidget> {
                             buttonSize: 40.0,
                             fillColor: Color(0x33FFFFFF),
                             icon: Icon(
-                              Icons.more_vert,
+                              Icons.add_alert,
                               color: Colors.black,
                               size: 24.0,
                             ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
+                            onPressed: () async {
+                              context.pushNamed(AlertsWidget.routeName);
                             },
                           ),
                         ],
@@ -110,26 +132,40 @@ class _LocationWidgetState extends State<LocationWidget> {
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
-                          borderRadius: BorderRadius.circular(6.0),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4.0,
+                              color: Color(0x33000000),
+                              offset: Offset(
+                                0.0,
+                                2.0,
+                              ),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: FlutterFlowGoogleMap(
-                          controller: _model.googleMapsController,
-                          onCameraIdle: (latLng) =>
-                              _model.googleMapsCenter = latLng,
-                          initialLocation: _model.googleMapsCenter ??=
-                              LatLng(13.106061, -59.613158),
-                          markerColor: GoogleMarkerColor.violet,
-                          mapType: MapType.normal,
-                          style: GoogleMapStyle.standard,
-                          initialZoom: 14.0,
-                          allowInteraction: true,
-                          allowZoom: true,
-                          showZoomControls: true,
-                          showLocation: true,
-                          showCompass: false,
-                          showMapToolbar: false,
-                          showTraffic: false,
-                          centerMapOnMarkerTap: true,
+                        child: Stack(
+                          children: [
+                            FlutterFlowGoogleMap(
+                              controller: _model.googleMapsController,
+                              onCameraIdle: (latLng) =>
+                                  _model.googleMapsCenter = latLng,
+                              initialLocation: _model.googleMapsCenter ??=
+                                  currentUserLocationValue!,
+                              markerColor: GoogleMarkerColor.violet,
+                              mapType: MapType.normal,
+                              style: GoogleMapStyle.standard,
+                              initialZoom: 14.0,
+                              allowInteraction: true,
+                              allowZoom: true,
+                              showZoomControls: true,
+                              showLocation: true,
+                              showCompass: true,
+                              showMapToolbar: true,
+                              showTraffic: true,
+                              centerMapOnMarkerTap: true,
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
@@ -140,7 +176,7 @@ class _LocationWidgetState extends State<LocationWidget> {
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
-                            borderRadius: BorderRadius.circular(6.0),
+                            borderRadius: BorderRadius.circular(12.0),
                             shape: BoxShape.rectangle,
                           ),
                           child: Padding(
@@ -172,7 +208,11 @@ class _LocationWidgetState extends State<LocationWidget> {
                                           size: 20.0,
                                         ),
                                         Text(
-                                          '123 Main Street, New York, NY 10001',
+                                          valueOrDefault<String>(
+                                            currentUserLocationValue
+                                                ?.toString(),
+                                            '0',
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(

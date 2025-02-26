@@ -118,7 +118,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   Theme.of(context).brightness ==
                                           Brightness.dark
                                       ? 'assets/images/@4xff_badgeDesign_dark_small.png'
-                                      : 'assets/images/@4xff_badgeDesign_light_small.png',
+                                      : 'assets/images/2vqf7_',
                                   width: 100.0,
                                   height: 100.0,
                                   fit: BoxFit.cover,
@@ -440,7 +440,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 12.0, 0.0),
                                         child: Text(
-                                          'Currency',
+                                          'Alerts',
                                           textAlign: TextAlign.start,
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
@@ -451,17 +451,11 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      'US Dollar (\$)',
-                                      textAlign: TextAlign.center,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Inter',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            letterSpacing: 0.0,
-                                          ),
+                                    Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      size: 24.0,
                                     ),
                                   ],
                                 ),

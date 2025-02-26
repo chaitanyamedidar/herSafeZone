@@ -119,6 +119,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: SosWidget.routeName,
           path: SosWidget.routePath,
           builder: (context, params) => SosWidget(),
+        ),
+        FFRoute(
+          name: AlertsWidget.routeName,
+          path: AlertsWidget.routePath,
+          builder: (context, params) => AlertsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
