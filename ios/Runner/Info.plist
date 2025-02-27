@@ -54,7 +54,7 @@
 	<true/>
 
 	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>In order to search nearby, this app requires access to your current location.</string>
+    <string>Please turn on your Location</string>
 
 
 
